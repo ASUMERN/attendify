@@ -107,7 +107,6 @@ attendance-system/
 
 - Face ID now use WebAuthn, so the browser can invoke the computer's built-in biometric prompt.
 - Face recognition uses the webcam in the browser and a stored face descriptor for comparison.
-- Iris scanning is still a native-hardware problem; the browser does not expose a standard iris API.
 - The legacy simulated flow remains as a fallback for unsupported cases.
 
 ## Going to production
@@ -116,3 +115,15 @@ attendance-system/
   (schema uses standard SQL, only minor syntax tweaks needed e.g. `AUTOINCREMENT` → `AUTO_INCREMENT`).
 - Add HTTPS, CSRF tokens on forms, and rate-limiting on `api/verify.php`.
 - Replace demo password seeding with a proper admin-managed registration flow.
+
+> ### 🌐 Live System Demo
+>
+> Access the deployed application here: **[https://attendify-y612.onrender.com/login.php](https://attendify-y612.onrender.com/login.php)**
+>
+> **Demo Login Credentials:**
+>
+> - **Admin:** Username: `admin` | Password: `admin123`
+> - **Lecturer:** Username: `lecturer` | Password: `lecturer123`
+> - **Student:** Username: `student` | Password: `student123`
+
+- Note: The live server is hosted on a free tier. If the link takes ~45 seconds to load initially, the server is spinning up.

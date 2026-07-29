@@ -3,25 +3,25 @@ require __DIR__ . '/includes/config.php';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $stmt = getDB()->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  $username = trim($_POST['username'] ?? '');
+  $password = $_POST['password'] ?? '';
+  $stmt = getDB()->prepare("SELECT * FROM users WHERE username = ?");
+  $stmt->execute([$username]);
+  $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['password'])) {
-        unset($user['password']);
-        $_SESSION['user'] = $user;
-        if ($user['role'] === 'student') {
+  if ($user && password_verify($password, $user['password'])) {
+    unset($user['password']);
+    $_SESSION['user'] = $user;
+    if ($user['role'] === 'student') {
       header('Location: ' . app_url(!empty($user['biometric_registered']) ? 'scan.php' : 'biometric_enrollment.php'));
-        } elseif ($user['role'] === 'admin') {
-            header('Location: ' . app_url('admin_portal.php'));
-        } else {
-        header('Location: ' . app_url('lecturer_portal.php'));
-        }
-        exit;
+    } elseif ($user['role'] === 'admin') {
+      header('Location: ' . app_url('admin_portal.php'));
+    } else {
+      header('Location: ' . app_url('lecturer_portal.php'));
     }
-    $error = 'Invalid username or password.';
+    exit;
+  }
+  $error = 'Invalid username or password.';
 }
 
 $pageTitle = 'Login';
@@ -47,12 +47,7 @@ require __DIR__ . '/includes/header.php';
       <button class="btn btn-primary w-100" type="submit">Sign In</button>
     </form>
     <hr>
-    <div class="small text-muted">
-      <strong>Demo accounts</strong><br>
-      Student: <code>student1</code> / <code>pass123</code><br>
-      Lecturer: <code>lecturer</code> / <code>lecturer123</code><br>
-      Admin: <code>admin</code> / <code>admin123</code>
-    </div>
+
   </div>
 </div>
 <?php require __DIR__ . '/includes/footer.php'; ?>

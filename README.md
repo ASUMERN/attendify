@@ -3,27 +3,42 @@
 A PHP + Bootstrap + JavaScript implementation of the attendance flow:
 
 ```
-Face Recognition
-        │
-        ▼
-   Verified? ──No──► Re-enter input (retry scan)
-        │Yes
-        ▼
-  Door of the Class Opens
-        │
-        ▼
- Student enters classroom? ──No──► Attendance Unverified
-        │Yes
-        ▼
-   Attendance Verified
-        │
-        ▼
-     Data Storage
-        │
-   ┌────┴─────┐
-   ▼          ▼
-Student    Lecturer's
-Portal      Portal
+[ STUDENT PORTAL ]                      [ LECTURER TERMINAL ]
+       │                                         │
+ 1. Log in to Portal                       1. Create Session
+ 2. Scan Face via Webcam                   2. Launch Verification Terminal
+ 3. Generate 128-d Vector                        │
+ 4. Store in SQLite Database ────────────────────┼────────────────┐
+                                                 │                │
+                                                 ▼                │
+                                     [ CAMERA DETECTS FACE ]     │
+                                                 │                │
+                                                 ▼                │
+                                       Query DB Descriptors ──────┘
+                                                 │
+                                                 ├──► No Match ──► [ Fail Alert ]
+                                                 │
+                                                 ▼
+                                           Match Found!
+                                                 │
+                        ┌────────────────────────┴────────────────────────┐
+                        │                                                 │
+                 First Scan Today?                                 Second Scan Today?
+                        │                                                 │
+                        ▼                                                 ▼
+              [ RECORD CHECK-IN ]                                [ RECORD CHECK-OUT ]
+             Log Timestamp (t_in)                              Log Timestamp (t_out)
+                                                                          │
+                                                                          ▼
+                                                             Calculate Elapsed Time:
+                                                            T_attended = t_out - t_in
+                                                                          │
+                                                ┌─────────────────────────┴────────────────────────┐
+                                                │                                                  │
+                                   T_attended ≥ 0.70 × T_total                        T_attended < 0.70 × T_total
+                                                │                                                  │
+                                                ▼                                                  ▼
+                                       [ Status: PRESENT ]                       [ Status: INCOMPLETE]
 ```
 
 ## Requirements
